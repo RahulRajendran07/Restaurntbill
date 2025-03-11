@@ -1,0 +1,45 @@
+###
+
+GET http://127.0.0.1:8000/rest/category/
+
+###
+POST http://127.0.0.1:8000/rest/category/
+Content-Type: application/json
+
+{
+    "name" : "beverages"
+}
+
+###
+GET http://127.0.0.1:8000/rest/category/1/
+
+###
+POST http://127.0.0.1:8000/rest/category/2/product/
+Content-Type: application/json
+
+{
+    "title" : "Meals",
+
+    "description" : "Meals description",
+
+    "price" : 100
+}
+
+###
+GET http://127.0.0.1:8000/rest/products/
+
+#update a product
+###
+PUT http://127.0.0.1:8000/rest/products/2/
+Content-Type: application/json
+
+{
+    "title" : "Biriyani",
+
+    "description" : "Biriyani description",
+
+    "price" : 130
+}
+
+###
+GET http://127.0.0.1:8000/rest/products?category=starter

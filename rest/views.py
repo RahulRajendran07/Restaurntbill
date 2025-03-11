@@ -4,13 +4,13 @@ from django.shortcuts import render
 from django.shortcuts import render,get_object_or_404
 
 # Create your views here.
-from rest.serializers import CategorySerializer
+from rest.serializers import CategorySerializer,ItemSerializer
 
 from rest_framework.generics import CreateAPIView,ListAPIView
 
-from rest.models import Category
+from rest.models import Category,Item
 
-from rest_framework.viewsets import ViewSet
+from rest_framework.viewsets import ViewSet,ModelViewSet
 
 from rest_framework.response import Response
 
@@ -82,3 +82,40 @@ class CategoryViewSet(ViewSet):
         category_object.delete()
 
         return Response(data={"message":"deleted"})
+    
+
+class ItemCreateView(CreateAPIView):
+
+    serializer_class = ItemSerializer
+
+    def perform_create(self, serializer):
+
+        id = self.kwargs.get("pk")
+
+        category_instance = get_object_or_404(Category,id=id)
+
+        serializer.save(category_object = category_instance)
+
+
+
+class ItemViewSet(ModelViewSet):
+
+   
+
+    serializer_class = ItemSerializer
+
+    queryset = Item.objects.all()
+
+    http_method_names = ["get","put","delete"]
+
+    def get_queryset(self):
+        
+         qs = Item.objects.all()
+
+         if "category" in self.request.query_params:
+             
+             category_name = self.request.query_params.get("category")
+
+             qs = qs.filter(category_object__name = category_name)
+
+         return qs
